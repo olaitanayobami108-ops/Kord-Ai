@@ -1,4 +1,4 @@
-const { startSock } = require("./core/handler.sock")
+const { startSock } = require("./core/sock")
 const { getPlatformInfo } = require("./core/dclient")
 const { spawn } = require("child_process")
 const http = require("http")
