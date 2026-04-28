@@ -12,7 +12,7 @@ const MAX_RECONNECT = 10
 
 const AUTH_DIR = "./session"
 
-async function sock() {
+async function startSock() {
   const { state, saveCreds } = await useMultiFileAuthState(AUTH_DIR)
   const { version } = await fetchLatestBaileysVersion()
 
@@ -24,10 +24,8 @@ async function sock() {
     browser: ["Kord Bot", "Chrome", "1.0.0"]
   })
 
-  // save session properly
   sock.ev.on("creds.update", saveCreds)
 
-  // connection handler
   sock.ev.on("connection.update", (update) => {
     const { connection, lastDisconnect } = update
 
@@ -50,24 +48,20 @@ async function sock() {
         console.log(`🔄 Reconnecting... (${reconnectCount})`)
 
         setTimeout(() => {
-          sock()
+          startSock()
         }, 3000)
       } else {
-        console.log("⛔ Stopped reconnecting (logged out or limit reached)")
+        console.log("⛔ Stopped reconnecting")
       }
     }
   })
 
-  // message listener (safe hook point)
   sock.ev.on("messages.upsert", ({ messages }) => {
     const msg = messages?.[0]
     if (!msg?.message) return
-
-    // connect your handlers here if needed
-    // require("../handler/msg")(sock, msg)
   })
 
   return sock
 }
 
-module.exports = { sock }
+module.exports = { startSock }
