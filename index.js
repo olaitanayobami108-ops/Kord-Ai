@@ -1,4 +1,4 @@
-const { sock } = require("./core/sock")
+const { startSock } = require("./core/handler.sock")
 const { getPlatformInfo } = require("./core/dclient")
 const { spawn } = require("child_process")
 const http = require("http")
@@ -19,7 +19,7 @@ const run = async () => {
       })
     }
 
-    await sock()
+    await startSock()
   } catch (e) {
     console.error(e)
   }
